@@ -20,6 +20,7 @@ public class KMDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
+
         Object o = decode2(ctx, buf);
         if (o != null) {
             out.add(o);
@@ -43,13 +44,15 @@ public class KMDecoder extends ByteToMessageDecoder {
                 if (magicNumber == HEAD_FLAG) break;
             }
             //如果是因为没有字节么有可读,那就直接返回
-            if (in.readableBytes() < BASE_HEAD_SIZE) return null;
+            if (in.readableBytes() < BASE_HEAD_SIZE) {
+                in.readerIndex(in.readerIndex()-1);
+            }
 
             //说明已经找到了开始的head_flag
             int beginIndex = in.readerIndex();
 
             //4 首先读取消息头的属性
-            short attr = in.getShort(2);
+            short attr = in.getShort(beginIndex+2);
             int bodyLength = getBodyLength(attr);
             int totalLength = BASE_HEAD_SIZE + bodyLength + 1;
             //5 读取totalLength 之后的一个字节,判断是否是 结尾的标识符
@@ -58,7 +61,7 @@ public class KMDecoder extends ByteToMessageDecoder {
                 in.readerIndex(beginIndex - 1);
                 return null;
             }
-            byte tailMagicNumber = in.getByte(totalLength);
+            byte tailMagicNumber = in.getByte(beginIndex+totalLength);
             if (tailMagicNumber == TAIL_FLAG) {
                 in.skipBytes(totalLength + 1);
                 return in.slice(beginIndex, totalLength).retain();

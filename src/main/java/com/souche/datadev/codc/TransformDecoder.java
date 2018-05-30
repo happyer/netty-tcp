@@ -31,17 +31,19 @@ public class TransformDecoder extends MessageToMessageDecoder<ByteBuf> {
         ByteBuf byteBuf = Unpooled.buffer();
         while (msg.readableBytes() > 0) {
             if (msg.readableBytes() >= 2) {
-                short red = msg.getShort(0);
+                short red = msg.getShort(msg.readerIndex());
                 if (red == T1) {
                     byteBuf.writeByte(0x7e);
                     msg.readShort();
-                } else if (red == T2) {
+                    continue;
+                }
+                if (red == T2) {
                     byteBuf.writeByte(0x7d);
                     msg.readShort();
-                } else {
-                    byteBuf.writeByte(msg.readByte());
+                    continue;
                 }
             }
+            byteBuf.writeByte(msg.readByte());
 
         }
         return byteBuf;
