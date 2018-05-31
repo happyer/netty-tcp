@@ -23,15 +23,16 @@ public class KMHeader implements Header, MsgAttr {
         short attr = msg.readShort();
         length = (short) (attr & 0x7ff);
         encryptType = ((attr >>> 10) & 0x01) > 1 ? EncryptType.RSA : EncryptType.None;
-        phone = getPhoneFromBCD(msg.slice(msg.readerIndex(), 6));
-        msg.skipBytes(6);
+        byte [] b = new byte[6];
+        msg.writeBytes(b);
+        phone = getPhoneFromBCD(b);
         number = msg.readShort();
     }
 
-    private String getPhoneFromBCD(ByteBuf buf) {
+    private String getPhoneFromBCD(byte[] buf) {
         StringBuilder stringBuilder = new StringBuilder();
-        while (buf.readableBytes()>0){
-            stringBuilder.append(encoderBCD(buf.readByte()));
+        for (byte b : buf) {
+            stringBuilder.append(encoderBCD(b));
         }
         return stringBuilder.toString();
     }

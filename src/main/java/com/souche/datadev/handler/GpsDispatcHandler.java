@@ -16,14 +16,19 @@ import io.netty.util.concurrent.EventExecutorGroup;
 public class GpsDispatcHandler extends ChannelInboundHandlerAdapter {
 
 
+//    private static int count = 0;
+
     //todo
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
 
         if (msg instanceof ByteBuf) {
-            Header header = new KMHeader((ByteBuf) msg);
-            System.out.println("header = " + header.getMsgId());
+//            Header header = new KMHeader((ByteBuf) msg);
+//            System.out.println("header = " + header.getMsgId());
+
+//            System.out.println("BusinessServerHandler call count="+ ++count);
+
         }
 
 

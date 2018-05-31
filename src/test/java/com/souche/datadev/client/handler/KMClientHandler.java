@@ -16,15 +16,29 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 //        for (int i = 0 ;i <10;i++){
-            ctx.writeAndFlush(get());
+        ctx.writeAndFlush(get());
 //        }
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-//        for (int i = 0 ;i <10;i++){
-            ctx.writeAndFlush(get());
+
+        //粘包测试
+//        for (int i = 0; i < 20; i++) {
+//            ctx.writeAndFlush(get());
 //        }
+        //end 粘包测试
+
+
+
+
+
+        //拆包测试
+        for (int i  = 0;i<20;i++){
+            ctx.writeAndFlush(generator());
+        }
+        //end拆包测试
+
     }
 
     @Override
@@ -51,16 +65,33 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     }
 
 
-//    public static void main(String[] args) {
-//
-//       String tcpData1 = "7E 02 00 00 22 01 44 00 44 00 55 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 18 05 30 17 31 36 25 04 00 00 00 00 69 7E";
-//
-//
-//
-//
-//        byte[] a = hexStringToByteArray("02");
-//
-//    }
-
+    /**
+     * 1024+12+1+2
+     * @return
+     */
+    public static ByteBuf  generator() {
+        byte b = 0x7e;
+        short id = 0x0200;
+        short attr = 0x01ff;
+        byte[] phone = new byte[]{0x01, 0x44, 0x00, 0x44, 0x00, 0x55};
+        short number = 1;
+        byte[] body = new byte[511];
+        for (int i = 0; i < 511; i++) {
+            body[i] = 0;
+        }
+        byte crc = 0x69;
+        byte tail = 0x7e;
+        ByteBuf  byteBuf = Unpooled.buffer();
+        byteBuf.writeByte(b);
+        byteBuf.writeShort(id);
+        byteBuf.writeShort(attr);
+        byteBuf.writeBytes(phone);
+        byteBuf.writeShort(number);
+        byteBuf.writeBytes(body);
+        byteBuf.writeByte(crc);
+        byteBuf.writeByte(tail);
+        System.out.println("byteBuf.readableBytes() = " + byteBuf.readableBytes());
+        return byteBuf;
+    }
 
 }
