@@ -5,12 +5,6 @@ package com.souche.datadev.pack;
  */
 public interface Header {
 
-
-
-
-
-
-
     short getMsgId();
 
     String getPhone();

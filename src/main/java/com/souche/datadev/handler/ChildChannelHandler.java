@@ -2,6 +2,7 @@ package com.souche.datadev.handler;
 
 import com.souche.datadev.codc.KMDecoder;
 import com.souche.datadev.codc.KMEncoder;
+import com.souche.datadev.codc.TransformDecoder;
 import com.souche.datadev.codc.TransformEncoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -22,6 +23,7 @@ public class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 
         ch.pipeline().addLast(new KMDecoder());
         ch.pipeline().addLast(new KMEncoder());
+        ch.pipeline().addLast(new TransformDecoder());
         ch.pipeline().addLast(new TransformEncoder());
         ch.pipeline().addLast(new IdleStateHandler(READ_IDEL_TIME_OUT, WRITE_IDEL_TIME_OUT, IDEL_TIME_OUT));
         ch.pipeline().addLast(new GpsIdleHandler());

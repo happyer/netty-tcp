@@ -19,7 +19,7 @@ public class KMDecoder extends ByteToMessageDecoder {
     private static final int BASE_HEAD_SIZE = 12;
 
 
-    private static int count = 0;
+//    private static int count = 0;
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
@@ -92,9 +92,9 @@ public class KMDecoder extends ByteToMessageDecoder {
         if (in.readableBytes() > BASE_HEAD_SIZE + 2 + 1) {
 
 
-            System.out.println("bufferIn.readableBytes()=" + in.readableBytes());
-            System.out.println("decode call count=" + ++count);
-            System.out.println("in.readerIndex() = " + in.readerIndex());
+//            System.out.println("bufferIn.readableBytes()=" + in.readableBytes());
+//            System.out.println("decode call count=" + ++count);
+//            System.out.println("in.readerIndex() = " + in.readerIndex());
 
             while (in.readableBytes() > 0) {
                 byte magicNumber = in.readByte();
@@ -117,8 +117,8 @@ public class KMDecoder extends ByteToMessageDecoder {
 
             //test
 
-            System.out.println("beginIndex=" + beginIndex);
-            System.out.println("endIndex=" + endIndex);
+//            System.out.println("beginIndex=" + beginIndex);
+//            System.out.println("endIndex=" + endIndex);
 
             //endtest
 

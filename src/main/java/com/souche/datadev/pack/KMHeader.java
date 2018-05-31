@@ -1,5 +1,6 @@
 package com.souche.datadev.pack;
 
+import com.souche.datadev.utils.BCDUtils;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -24,26 +25,12 @@ public class KMHeader implements Header, MsgAttr {
         length = (short) (attr & 0x7ff);
         encryptType = ((attr >>> 10) & 0x01) > 1 ? EncryptType.RSA : EncryptType.None;
         byte [] b = new byte[6];
-        msg.writeBytes(b);
-        phone = getPhoneFromBCD(b);
+        msg.readBytes(b);
+        phone = BCDUtils.getPhoneFromBCD(b);
         number = msg.readShort();
     }
 
-    private String getPhoneFromBCD(byte[] buf) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (byte b : buf) {
-            stringBuilder.append(encoderBCD(b));
-        }
-        return stringBuilder.toString();
-    }
 
-
-    private String encoderBCD(byte b) {
-        int lower = (b & 0x0f);
-        int higher = b >>> 4;
-
-        return higher + "" + lower;
-    }
 
     @Override
     public short getMsgId() {

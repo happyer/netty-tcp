@@ -1,5 +1,6 @@
 package com.souche.datadev.codc;
 
+import com.souche.datadev.pack.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,9 +14,6 @@ import java.util.List;
 public class TransformDecoder extends MessageToMessageDecoder<ByteBuf> {
 
 
-    private static final short T1 = 0x7d02;
-    private static final short T2 = 0x7d01;
-
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
 
@@ -28,25 +26,10 @@ public class TransformDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     private Object decode(ChannelHandlerContext ctx, ByteBuf msg) {
 
-        ByteBuf byteBuf = Unpooled.buffer();
-        while (msg.readableBytes() > 0) {
-            if (msg.readableBytes() >= 2) {
-                short red = msg.getShort(msg.readerIndex());
-                if (red == T1) {
-                    byteBuf.writeByte(0x7e);
-                    msg.readShort();
-                    continue;
-                }
-                if (red == T2) {
-                    byteBuf.writeByte(0x7d);
-                    msg.readShort();
-                    continue;
-                }
-            }
-            byteBuf.writeByte(msg.readByte());
+        Header header = new KMHeader(msg);
+        Body body = new KMBody(msg,header);
 
-        }
-        return byteBuf;
+        return new KMPack(header, body);
 
     }
 }

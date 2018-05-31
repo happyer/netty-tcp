@@ -1,49 +1,61 @@
 package com.souche.datadev.handler;
 
-import com.souche.datadev.holder.ClientMap;
-import com.souche.datadev.pack.Header;
-import com.souche.datadev.pack.KMHeader;
-import com.sun.deploy.util.SessionState;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
+import com.souche.datadev.holder.ClientHolder;
+import com.souche.datadev.pack.KMPack;
+import com.souche.datadev.pack.MessagId;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.concurrent.EventExecutorGroup;
 
 /**
  * Created by chauncy on 2018/5/29.
  */
 public class GpsBizHandler extends ChannelInboundHandlerAdapter {
 
-
-    private static int count = 0;
-
     //todo
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-
-        if (msg instanceof ByteBuf) {
-//            Header header = new KMHeader((ByteBuf) msg);
-//            System.out.println("header = " + header.getMsgId());
-
-            System.out.println("BusinessServerHandler call count="+ ++count);
-
-        }
-
+        messageParseAndReply(ctx, msg);
 
     }
+
+    private void messageParseAndReply(ChannelHandlerContext ctx, Object msg) {
+        if (msg instanceof KMPack) {
+            KMPack pack = (KMPack) msg;
+            //保持长连接
+            ClientHolder.add(pack.getHeader(), ctx.channel());
+            switch (MessagId.getVal(pack.getHeader().getMsgId())) {
+                case TERMINAL_HEART:
+                    doHeart(pack);
+                    break;
+                case LOCATION_REPORT:
+                    doLocationReport(pack);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void doLocationReport(KMPack pack) {
+        System.out.println(String.format("recv phone = %s report status= %d  lat=%d lon=%d", pack.getHeader().getPhone(), pack.getBody().getStatus(),pack.getBody().getLatitude(),pack.getBody().getLongitude()));
+    }
+
+    private void doHeart(KMPack pack) {
+        System.out.println(String.format("recv phone = %s heart  = ", pack.getHeader().getPhone()));
+    }
+
 
     //todo
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ClientMap.add(ctx.toString(), ctx.channel());
+
     }
 
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        ClientMap.remove(ctx.channel());
+        ClientHolder.remove(ctx.channel());
     }
 
     @Override
