@@ -16,7 +16,7 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 //        for (int i = 0 ;i <10;i++){
-        ctx.writeAndFlush(get());
+//        ctx.writeAndFlush(get());
 //        }
     }
 
@@ -33,11 +33,11 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 
 
-        //拆包测试
+//        //拆包测试
         for (int i  = 0;i<20;i++){
             ctx.writeAndFlush(generator());
         }
-        //end拆包测试
+//        //end拆包测试
 
     }
 

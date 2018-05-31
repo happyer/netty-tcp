@@ -19,12 +19,12 @@ public class KMDecoder extends ByteToMessageDecoder {
     private static final int BASE_HEAD_SIZE = 12;
 
 
-//    private static int count = 0;
+    private static int count = 0;
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
 
-        Object o = decode2(ctx, buf);
+        Object o = decode(ctx, buf);
         if (o != null) {
             out.add(o);
         }
@@ -86,59 +86,79 @@ public class KMDecoder extends ByteToMessageDecoder {
 
     }
 
+
     private Object decode(ChannelHandlerContext ctx, ByteBuf in) {
         //1 可读长度必须大于基本长度: 头的基本长度+头和尾的长度+校验码的长度
         if (in.readableBytes() > BASE_HEAD_SIZE + 2 + 1) {
-            //2 防止客户端数据过大,太大是不合理的
-            if (in.readableBytes() > 2048) {
-                in.skipBytes(in.readableBytes());
-            }
-            //3 寻找第一个 head_flag
+
+
+            System.out.println("bufferIn.readableBytes()=" + in.readableBytes());
+            System.out.println("decode call count=" + ++count);
+            System.out.println("in.readerIndex() = " + in.readerIndex());
 
             while (in.readableBytes() > 0) {
                 byte magicNumber = in.readByte();
                 if (magicNumber == HEAD_FLAG) break;
             }
-            //如果是应为没有字节么有可读,那就直接返回
-            if (in.readableBytes() < 0) return 0;
 
             //说明已经找到了开始的head_flag
             int beginIndex = in.readerIndex();
-            // 4 寻找后面的 tail_flag
+
+            //如果是应为没有字节么有可读,那就直接返回
+            if (in.readableBytes() < 0) {
+                in.readerIndex(beginIndex - 1);
+                return null;
+            }
+
+
+            // 寻找后面的 tail_flag
             int endIndex = findAfterMagicNumber(in);
+
+
+            //test
+
+            System.out.println("beginIndex=" + beginIndex);
+            System.out.println("endIndex=" + endIndex);
+
+            //endtest
+
+
             //如果找不到 结尾的tail_flag 那就直接跳过,返回null
             if (endIndex == -1) {
-                in.skipBytes(in.readableBytes());
+                in.readerIndex(beginIndex - 1);
                 return null;
             }
-            //5 开始的head_flag 和tail_flag 都已经找到了,那几进行解析,和判断
+
+            //开始的head_flag 和tail_flag 都已经找到了,那几进行解析,和判断
+
+            //进行转义,将数据读取出来进行转义
+            ByteBuf byteBuf1 = reverseTransform(in.slice(beginIndex, (endIndex - beginIndex)));
             //首先读取消息头的属性
-            short attr = in.getShort(2);
-            int bodyLength = getBodyLength(attr);
-            boolean isDivPack = isDivPack(attr);
-            //头+消息体+校验+末尾的标识符
-            int totalLength = 12 + bodyLength + 1 + 1;
-            if (isDivPack) {
-                totalLength = 2 + 2;
+            if (lengthIsRight(byteBuf1)) {
+                in.readerIndex(endIndex + 1);
+                return byteBuf1.retain();
             }
-            //6 如果末尾的tail_flag - 头的开始 == 总长度,那这个包就是一个完整的包
-            if (endIndex - beginIndex == totalLength) {
-                return Unpooled.copiedBuffer(in).slice(beginIndex, endIndex).retain();
-            } else {
-                //否则就不是一个完整的包,跳过,返回
-                in.skipBytes(endIndex - beginIndex);
-                return null;
-            }
+            //fixme ??可以忽略
+//            else {
+//                in.readerIndex(endIndex);
+//                return null;
+//            }
         }
         return null;
 
     }
 
     private int findAfterMagicNumber(ByteBuf in) {
-        return in.forEachByte(value -> value == TAIL_FLAG);
+        for (int index = in.readerIndex(); index < in.capacity(); index++) {
+            if (in.getByte(index) == TAIL_FLAG) {
+                return index;
+            }
+
+        }
+        return -1;
     }
 
-    private int getBodyLength(short attr) {
+    private static int getBodyLength(short attr) {
         return (attr & 0x3ff);
     }
 
@@ -152,5 +172,36 @@ public class KMDecoder extends ByteToMessageDecoder {
         return ((attr >>> 13) & 0x01) > 0 ? true : false;
     }
 
+
+    private static final short T1 = 0x7d02;
+    private static final short T2 = 0x7d01;
+
+    private static ByteBuf reverseTransform(ByteBuf msg) {
+        ByteBuf byteBuf = Unpooled.buffer();
+        while (msg.readableBytes() > 0) {
+            if (msg.readableBytes() >= 2) {
+                short red = msg.getShort(msg.readerIndex());
+                if (red == T1) {
+                    byteBuf.writeByte(0x7e);
+                    msg.readShort();
+                    continue;
+                }
+                if (red == T2) {
+                    byteBuf.writeByte(0x7d);
+                    msg.readShort();
+                    continue;
+                }
+            }
+            byteBuf.writeByte(msg.readByte());
+
+        }
+        return byteBuf;
+    }
+
+    private static boolean lengthIsRight(ByteBuf in) {
+        short attr = in.getShort(2);
+        int bodyLength = getBodyLength(attr);
+        return in.readableBytes() == (1 + BASE_HEAD_SIZE + bodyLength);
+    }
 
 }

@@ -13,10 +13,10 @@ import io.netty.util.concurrent.EventExecutorGroup;
 /**
  * Created by chauncy on 2018/5/29.
  */
-public class GpsDispatcHandler extends ChannelInboundHandlerAdapter {
+public class GpsBizHandler extends ChannelInboundHandlerAdapter {
 
 
-//    private static int count = 0;
+    private static int count = 0;
 
     //todo
     @Override
@@ -27,7 +27,7 @@ public class GpsDispatcHandler extends ChannelInboundHandlerAdapter {
 //            Header header = new KMHeader((ByteBuf) msg);
 //            System.out.println("header = " + header.getMsgId());
 
-//            System.out.println("BusinessServerHandler call count="+ ++count);
+            System.out.println("BusinessServerHandler call count="+ ++count);
 
         }
 
