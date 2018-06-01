@@ -17,6 +17,7 @@ public class GpsIdleHandler extends ChannelInboundHandlerAdapter{
 
             switch (e.state()){
                 case ALL_IDLE:
+
                     break;
                 case READER_IDLE:
                     break;
@@ -25,6 +26,8 @@ public class GpsIdleHandler extends ChannelInboundHandlerAdapter{
                 default:
                     break;
             }
+        }else {
+            super.userEventTriggered(ctx,evt);
         }
     }
 }

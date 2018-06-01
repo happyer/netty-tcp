@@ -5,6 +5,7 @@ import com.souche.datadev.pack.KMPack;
 import com.souche.datadev.pack.MessagId;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +59,27 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
 
     }
 
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if ( evt instanceof IdleStateEvent){
+            IdleStateEvent e = (IdleStateEvent) evt;
+
+            switch (e.state()){
+                case ALL_IDLE:
+                    logger.info("phone ={}  is all idle",ClientHolder.getPhone(ctx.channel()));
+                    break;
+                case READER_IDLE:
+                    break;
+                case WRITER_IDLE:
+                    break;
+                default:
+                    break;
+            }
+        }else {
+            super.userEventTriggered(ctx,evt);
+        }
+    }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
