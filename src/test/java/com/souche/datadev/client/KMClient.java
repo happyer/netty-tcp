@@ -1,6 +1,7 @@
 package com.souche.datadev.client;
 
 import com.souche.datadev.client.handler.KMClientHandler;
+import com.souche.datadev.utils.BitUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -14,6 +15,9 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.omg.PortableInterceptor.HOLDING;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by chauncy on 2018/5/30.
@@ -50,18 +54,32 @@ public class KMClient {
         }
     }
 
+    private static String heartData = "7E 00 02 00 00 01 44 00 44 00 55 00 01 69 7E";
+
+
+    public static ByteBuf getHeart() {
+        ByteBuf byteBuf = Unpooled.buffer();
+        for (String s : heartData.split(" ")) {
+            byteBuf.writeByte(BitUtils.hexStringToByteArray(s)[0]);
+        }
+        return byteBuf;
+    }
 
     public static void main(String[] args) throws InterruptedException {
-        String host ="localhost";
-        int port  = 9090;
-        KMClient kmClient = new KMClient(host,port);
+        String host = "localhost";
+        int port = 9090;
+        KMClient kmClient = new KMClient(host, port);
+
+        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
+            HeartHelper.getChannels().forEach(channel -> {
+                channel.writeAndFlush(getHeart());
+                System.out.println("start send heart" );
+            });
+        }, 0, 1, TimeUnit.SECONDS);
         kmClient.start();
 
 
-
     }
-
-
 
 
 }

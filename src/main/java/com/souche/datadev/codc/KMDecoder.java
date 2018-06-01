@@ -89,7 +89,7 @@ public class KMDecoder extends ByteToMessageDecoder {
 
     private Object decode(ChannelHandlerContext ctx, ByteBuf in) {
         //1 可读长度必须大于基本长度: 头的基本长度+头和尾的长度+校验码的长度
-        if (in.readableBytes() > BASE_HEAD_SIZE + 2 + 1) {
+        if (in.readableBytes() >= BASE_HEAD_SIZE + 2 + 1) {
 
 
 //            System.out.println("bufferIn.readableBytes()=" + in.readableBytes());

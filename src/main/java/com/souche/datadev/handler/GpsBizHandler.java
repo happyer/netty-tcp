@@ -49,7 +49,7 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void doHeart(KMPack pack) {
-        logger.info(String.format("recv phone = %s heart  = ", pack.getHeader().getPhone()));
+        logger.info(String.format("recv phone = %s heart ", pack.getHeader().getPhone()));
     }
 
 
@@ -92,7 +92,7 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
         if (this == ctx.pipeline().last()) {
             //todo ended
         }
-        logger.info("phone={} is disconnect", ClientHolder.getPhone(ctx.channel()));
+        logger.info(" exception phone={} is disconnect", ClientHolder.getPhone(ctx.channel()));
         ClientHolder.remove(ctx.channel());
         ctx.channel().close();
         ctx.close();

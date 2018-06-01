@@ -40,15 +40,15 @@ public class ClientHolder {
 
     public static void remove(Channel socketChannel) {
 
-        //space change time
-        String phone = channelStringMap.get(socketChannel);
-        channelStringMap.remove(socketChannel);
-        map.remove(phone);
-//        for (Map.Entry entry : map.entrySet()) {
-//            if (entry.getValue() == socketChannel) {
-//                map.remove(entry.getKey());
-//            }
-//        }
+
+        if (socketChannel != null) {
+            String phone = channelStringMap.get(socketChannel);
+            channelStringMap.remove(socketChannel);
+            if (phone != null) {
+                map.remove(phone);
+            }
+        }
+
     }
 
     public static Set<Map.Entry<String, Channel>> getALL() {

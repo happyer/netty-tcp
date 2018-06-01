@@ -1,9 +1,13 @@
 package com.souche.datadev.client.handler;
 
+import com.souche.datadev.client.HeartHelper;
+import com.souche.datadev.client.KMClient;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by chauncy on 2018/5/30.
@@ -30,14 +34,17 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         //end 粘包测试
 
 
-
-
-
 //        //拆包测试
-        for (int i  = 0;i<20;i++){
+        for (int i = 0; i < 20; i++) {
             ctx.writeAndFlush(generator());
         }
 //        //end拆包测试
+
+
+        ctx.writeAndFlush(KMClient.getHeart());
+
+        HeartHelper.add(ctx.channel());
+
 
     }
 
@@ -54,6 +61,8 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         return byteBuf;
     }
 
+
+
     public static byte[] hexStringToByteArray(String s) {
         int len = s.length();
         byte[] data = new byte[len / 2];
@@ -67,9 +76,10 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     /**
      * 1024+12+1+2
+     *
      * @return
      */
-    public static ByteBuf  generator() {
+    public static ByteBuf generator() {
         byte b = 0x7e;
         short id = 0x0200;
         short attr = 0x01ff;
@@ -81,7 +91,7 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         }
         byte crc = 0x69;
         byte tail = 0x7e;
-        ByteBuf  byteBuf = Unpooled.buffer();
+        ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeByte(b);
         byteBuf.writeShort(id);
         byteBuf.writeShort(attr);
@@ -90,7 +100,6 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         byteBuf.writeBytes(body);
         byteBuf.writeByte(crc);
         byteBuf.writeByte(tail);
-        System.out.println("byteBuf.readableBytes() = " + byteBuf.readableBytes());
         return byteBuf;
     }
 
