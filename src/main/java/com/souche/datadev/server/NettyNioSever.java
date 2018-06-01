@@ -9,6 +9,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by chauncy on 2018/5/29.
@@ -16,7 +18,10 @@ import io.netty.handler.logging.LoggingHandler;
 public class NettyNioSever implements Runnable {
 
 
-    private final  int port;
+    private static Logger logger = LoggerFactory.getLogger(NettyNioSever.class);
+
+
+    private final int port;
 
 
     public NettyNioSever(int port) {
@@ -38,7 +43,7 @@ public class NettyNioSever implements Runnable {
 
             // Start the server.
             ChannelFuture f = b.bind(port).sync();
-
+            logger.info("sever start port ={}", port);
             // Wait until the server socket is closed.
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {

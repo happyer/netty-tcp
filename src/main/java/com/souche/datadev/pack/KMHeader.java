@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * Created by chauncy on 2018/5/29.
  */
-public class KMHeader implements Header, MsgAttr {
+public class KMHeader implements Header {
 
 
     private short id;
@@ -58,10 +58,6 @@ public class KMHeader implements Header, MsgAttr {
         return encryptType;
     }
 
-    @Override
-    public boolean isDivisionPack() {
-        return false;
-    }
 
 
 }

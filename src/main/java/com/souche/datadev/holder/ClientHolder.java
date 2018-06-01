@@ -33,6 +33,10 @@ public class ClientHolder {
         return map.get(clientId);
     }
 
+    public static String getPhone(Channel socketChannel) {
+        return channelStringMap.get(socketChannel);
+    }
+
 
     public static void remove(Channel socketChannel) {
 

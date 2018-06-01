@@ -11,4 +11,7 @@ public interface Header {
 
     short getMsgNumber();
 
+    short getLength();
+
+    EncryptType getEncryptType();
 }

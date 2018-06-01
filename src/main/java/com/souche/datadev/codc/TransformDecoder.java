@@ -2,7 +2,6 @@ package com.souche.datadev.codc;
 
 import com.souche.datadev.pack.*;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
