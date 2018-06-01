@@ -54,7 +54,7 @@ public class KMClient {
         }
     }
 
-    private static String heartData = "7E 00 02 00 00 01 44 00 44 00 55 00 01 69 7E";
+    private static String heartData = "7E 00 02 00 00 01 86 57 11 59 29 00 01 69 7E";
 
 
     public static ByteBuf getHeart() {

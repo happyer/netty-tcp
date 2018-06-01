@@ -35,9 +35,9 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 
 //        //拆包测试
-        for (int i = 0; i < 20; i++) {
-            ctx.writeAndFlush(generator());
-        }
+//        for (int i = 0; i < 20; i++) {
+//            ctx.writeAndFlush(generator());
+//        }
 //        //end拆包测试
 
 
