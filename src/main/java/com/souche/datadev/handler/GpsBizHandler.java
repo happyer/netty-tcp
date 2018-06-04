@@ -45,7 +45,7 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void doLocationReport(KMPack pack) {
-        logger.info(String.format("recv phone = %s report status= %d  lat=%d lon=%d", pack.getHeader().getPhone(), pack.getBody().getStatus(), pack.getBody().getLatitude(), pack.getBody().getLongitude()));
+        logger.info(String.format("recv phone = %s report alarm= %d  lat=%d lon=%d", pack.getHeader().getPhone(), pack.getBody().getAlarm(), pack.getBody().getLatitude(), pack.getBody().getLongitude()));
     }
 
     private void doHeart(KMPack pack) {

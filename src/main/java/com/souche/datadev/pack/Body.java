@@ -8,8 +8,6 @@ public interface Body {
 
     AlarmType getAlarm();
 
-    int getStatus();
-
     int getLatitude();
 
     int getLongitude();

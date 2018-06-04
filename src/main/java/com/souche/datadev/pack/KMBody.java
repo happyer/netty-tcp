@@ -9,7 +9,6 @@ import io.netty.buffer.ByteBufUtil;
 public class KMBody implements Body {
 
     private AlarmType alarm;
-    private int status;
     private int latitude;
     private int longitude;
     private short altitude;
@@ -27,7 +26,7 @@ public class KMBody implements Body {
         if (header.getMsgId() == 0x200) {
             int al = msg.readInt();
             alarm = AlarmType.getValue(al);
-            status = msg.readInt();
+            int status = msg.readInt();
             latitude = msg.readInt();
             longitude = msg.readInt();
             altitude = msg.readShort();
@@ -75,10 +74,6 @@ public class KMBody implements Body {
         return alarm;
     }
 
-    @Override
-    public int getStatus() {
-        return status;
-    }
 
     @Override
     public int getLatitude() {
