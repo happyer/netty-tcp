@@ -28,7 +28,9 @@ public class ProcessMessage {
     public void doRegister() {
         RegisterRequest registerRequest = new RegisterRequest(header, buf);
         //处理响应的业务逻辑
-        Response registerResponse = new RegisterResponse(registerRequest);
+        //判断是否已经注册过
+
+        Response registerResponse = new RegisterResponse(header.getMsgNumber(),Response.SUCCESS,new String("token"));
         ctx.writeAndFlush(registerResponse.response());
     }
 
