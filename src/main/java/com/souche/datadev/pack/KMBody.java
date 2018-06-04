@@ -23,6 +23,8 @@ public class KMBody implements Body {
 
 
     public KMBody(ByteBuf msg, Header header) {
+
+
         if (header.getMsgId() == 0x200) {
             int al = msg.readInt();
             alarm = AlarmType.getValue(al);

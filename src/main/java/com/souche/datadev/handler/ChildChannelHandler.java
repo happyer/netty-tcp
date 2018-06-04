@@ -23,7 +23,7 @@ public class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 
         ch.pipeline().addLast(new KMDecoder());
         ch.pipeline().addLast(new KMEncoder());
-        ch.pipeline().addLast(new TransformDecoder());
+//        ch.pipeline().addLast(new TransformDecoder());
         ch.pipeline().addLast(new TransformEncoder());
         ch.pipeline().addLast(new IdleStateHandler(READ_IDEL_TIME_OUT, WRITE_IDEL_TIME_OUT, IDEL_TIME_OUT));
 //        ch.pipeline().addLast(new GpsIdleHandler());
