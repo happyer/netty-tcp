@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
 public interface Response {
 
 
-    byte SUCCESS = 0;
+    byte STATUS_SUCCESS = 0;
 
     ByteBuf response();
 }

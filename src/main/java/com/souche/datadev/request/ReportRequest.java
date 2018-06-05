@@ -8,5 +8,7 @@ import io.netty.buffer.ByteBuf;
  */
 public class ReportRequest {
     public ReportRequest(Header header, ByteBuf buf) {
+
+
     }
 }

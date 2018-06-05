@@ -1,6 +1,9 @@
 package com.souche.datadev.biz;
 
+import com.souche.datadev.pack.Body;
 import com.souche.datadev.pack.Header;
+import com.souche.datadev.pack.KMBody;
+import com.souche.datadev.pack.KMHeader;
 import com.souche.datadev.request.RegisterRequest;
 import com.souche.datadev.request.ReportRequest;
 import com.souche.datadev.response.CommonResponse;
@@ -30,7 +33,7 @@ public class ProcessMessage {
         //处理响应的业务逻辑
         //判断是否已经注册过
 
-        Response registerResponse = new RegisterResponse(header.getMsgNumber(),Response.SUCCESS,new String("token"));
+        Response registerResponse = new RegisterResponse(header.getPhone(), header.getMsgNumber(), Response.STATUS_SUCCESS, new String("token"));
         ctx.writeAndFlush(registerResponse.response());
     }
 
@@ -44,12 +47,18 @@ public class ProcessMessage {
 
     public void doLocationReport() {
         ReportRequest reportRequest = new ReportRequest(header, buf);
+
+        Body body = new KMBody(buf, header);
+
+        System.out.println("body = " + body.getTime());
+
         //todo send mq
+
         responseCommon();
     }
 
     private void responseCommon() {
-        Response response = new CommonResponse(header.getMsgNumber(), header.getMsgId(), Response.SUCCESS);
-        ctx.writeAndFlush(response.response());
+        Response response = new CommonResponse(header.getPhone(), header.getMsgNumber(), Response.STATUS_SUCCESS);
+        ctx.write(response.response());
     }
 }

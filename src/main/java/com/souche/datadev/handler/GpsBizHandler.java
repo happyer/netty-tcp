@@ -39,7 +39,7 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
             //保持长连接
             ClientHolder.add(header, ctx.channel());
 
-            ProcessMessage processMessge = new ProcessMessage(ctx,header,buf);
+            ProcessMessage processMessge = new ProcessMessage(ctx, header, buf);
             switch (MessagId.getVal(header.getMsgId())) {
                 case TERMINAL_REGISTER:
                     processMessge.doRegister();
@@ -58,8 +58,6 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
             }
         }
     }
-
-
 
 
     //todo
@@ -105,5 +103,11 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
         ClientHolder.remove(ctx.channel());
         ctx.channel().close();
         ctx.close();
+    }
+
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.flush();
     }
 }

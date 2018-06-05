@@ -1,5 +1,6 @@
 package com.souche.datadev.response;
 
+import com.souche.datadev.utils.BCDUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -8,22 +9,31 @@ import io.netty.buffer.Unpooled;
  */
 public class CommonResponse implements Response {
 
-    private short number;
-    private short id;
-    private byte res;
+    private final short number;
+    private final byte res;
+    private final String phone;
 
-    public CommonResponse(short number, short id, byte res) {
+
+    public CommonResponse(String phone, short number,  byte res) {
         this.number = number;
-        this.id = id;
         this.res = res;
+        this.phone = phone;
     }
 
     @Override
     public ByteBuf response() {
-        ByteBuf byteBuf = Unpooled.buffer();
+
+        ByteBuf byteBuf = Unpooled.directBuffer();
+
+        byteBuf.writeShort(0x8001);
+        //流水号+终端id+状态
+        byteBuf.writeShort(2 + 2 + 1);
+        byteBuf.writeBytes(BCDUtils.encodeToBCDArray(Long.parseLong(phone)));
         byteBuf.writeShort(number);
-        byteBuf.writeShort(id);
-        byteBuf.writeShort(res);
+        //消息体
+        byteBuf.writeShort(number);
+        byteBuf.writeShort(0x8001);
+        byteBuf.writeByte(res);
         return byteBuf;
     }
 }
