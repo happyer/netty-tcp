@@ -50,7 +50,7 @@ public class ProcessMessage {
         int length = header.getLength();
         byte[] token = new byte[length];
         buf.readBytes(token);
-//        logger.info("terminal auth length={},token={}", length, new String(token));
+        logger.info("terminal auth length={},token={},phone={}", length, new String(token),header.getPhone());
         responseCommon();
     }
 

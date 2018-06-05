@@ -54,17 +54,15 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
                     processMessge.doLocationReport();
                     break;
                 default:
-                    System.out.println("ctx.channel() = " + ctx.channel());
+                    logger.info(" default ctx.channel() = {}", ctx.channel());
                     break;
             }
         }
     }
 
 
-    //todo
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("ctx.channel()  active = " + ctx.channel());
     }
 
 
@@ -75,7 +73,6 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
 
             switch (e.state()) {
                 case ALL_IDLE:
-//                    logger.info("phone ={}  is all idle", ClientHolder.getPhone(ctx.channel()));
                     break;
                 case READER_IDLE:
                     break;
@@ -93,6 +90,7 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         logger.info("phone={} is disconnect", ClientHolder.getPhone(ctx.channel()));
         ClientHolder.remove(ctx.channel());
+
     }
 
     @Override
