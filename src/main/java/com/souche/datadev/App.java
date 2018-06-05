@@ -12,7 +12,6 @@ import java.util.concurrent.Executors;
  */
 public class App {
 
-    private static Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
 

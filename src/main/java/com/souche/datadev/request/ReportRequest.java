@@ -23,29 +23,50 @@ public class ReportRequest {
     private int longitudeType;
     private int latitudeType;
     private int oilPipe;
+    private int distance;
+    private String phone;
 
 
+
+    public ReportRequest() {
+    }
 
     public ReportRequest(Header header, ByteBuf msg) {
-        if (header.getId() == 0x200) {
-            int al = msg.readInt();
-            alarm = AlarmType.getValue(al);
-            int status = msg.readInt();
-            latitude = msg.readInt();
-            longitude = msg.readInt();
-            altitude = msg.readShort();
-            speed = msg.readShort();
-            director = msg.readShort();
-            byte[] t = new byte[6];
-            acc = (status & 0x01) == 0 ? 0 : 1;
-            location = (status & 0x02) == 0 ? 0 : 1;
-            longitudeType = (status & 0x04) == 0 ? 0 : 1;
-            latitudeType = (status & 0x08) == 0 ? 0 : 1;
-            oilPipe = (status & 0x0400) == 0 ? 0 : 1;
-            msg.readBytes(t);
-            time = ByteBufUtil.hexDump(t);
+        this.phone = header.getPhone();
+        int al = msg.readInt();
+        alarm = AlarmType.getValue(al);
+        int status = msg.readInt();
+        latitude = msg.readInt();
+        longitude = msg.readInt();
+        altitude = msg.readShort();
+        speed = msg.readShort();
+        director = msg.readShort();
+        byte[] t = new byte[6];
+        acc = (status & 0x01) == 0 ? 0 : 1;
+        location = (status & 0x02) == 0 ? 0 : 1;
+        longitudeType = (status & 0x04) == 0 ? 0 : 1;
+        latitudeType = (status & 0x08) == 0 ? 0 : 1;
+        oilPipe = (status & 0x0400) == 0 ? 0 : 1;
+        msg.readBytes(t);
+        time = ByteBufUtil.hexDump(t);
+        //判断是否有附加信息
+        if (msg.readableBytes() > 2) {
+            byte mid = msg.readByte();
+            byte length = msg.readByte();
+            if (mid == 0x01) {
+                distance = msg.readInt();
+            }
+            if (mid == 0xEB) {
+                msg.skipBytes(length);
+            }
+
         }
 
+
+    }
+
+    public int getDistance() {
+        return distance;
     }
 
     public AlarmType getAlarm() {

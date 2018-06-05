@@ -53,6 +53,9 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
                 case LOCATION_REPORT:
                     processMessge.doLocationReport();
                     break;
+                case LOCATION_REPORT_BATCH:
+                    processMessge.doLocationReportBath();
+                    break;
                 default:
                     logger.info(" default ctx.channel() = {}", ctx.channel());
                     break;

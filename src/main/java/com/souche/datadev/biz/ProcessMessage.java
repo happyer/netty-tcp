@@ -1,7 +1,9 @@
 package com.souche.datadev.biz;
 
+import com.alibaba.fastjson.JSON;
 import com.souche.datadev.pack.Header;
 import com.souche.datadev.request.RegisterRequest;
+import com.souche.datadev.request.ReportBathRequest;
 import com.souche.datadev.request.ReportRequest;
 import com.souche.datadev.response.CommonResponse;
 import com.souche.datadev.response.RegisterResponse;
@@ -50,7 +52,7 @@ public class ProcessMessage {
         int length = header.getLength();
         byte[] token = new byte[length];
         buf.readBytes(token);
-        logger.info("terminal auth length={},token={},phone={}", length, new String(token),header.getPhone());
+        logger.info("terminal auth length={},token={},phone={}", length, new String(token), header.getPhone());
         responseCommon();
     }
 
@@ -60,16 +62,27 @@ public class ProcessMessage {
     }
 
     public void doLocationReport() {
-        ReportRequest reportRequest = new ReportRequest(header, buf);
+        ReportRequest reportRequest = new ReportRequest(header,buf);
 
         //todo send mq
         responseCommon();
-        logger.info("location report gpsTime={} ,lat={},lon={} location={} ",
-                reportRequest.getTime(), reportRequest.getLatitude(), reportRequest.getLongitude(),reportRequest.getLocation());
+
+
+        logger.info(JSON.toJSONString(reportRequest));
+
+//        logger.info("location report gpsTime={} ,lat={},lon={} location={} ",
+//                reportRequest.getTime(), reportRequest.getLatitude(), reportRequest.getLongitude(),reportRequest.getLocation());
     }
 
     private void responseCommon() {
         Response response = new CommonResponse(header.getPhone(), header.getNo(), header.getId(), Response.STATUS_SUCCESS);
         ctx.write(response.response());
+    }
+
+    public void doLocationReportBath() {
+        logger.info("location batch");
+        ReportBathRequest reportBathRequest = new ReportBathRequest(header, buf);
+        logger.info(JSON.toJSONString(reportBathRequest));
+        responseCommon();
     }
 }
