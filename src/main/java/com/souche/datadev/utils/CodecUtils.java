@@ -59,7 +59,7 @@ public class CodecUtils {
         return null;
     }
 
-    private static ByteBuf reverseTransform(ByteBuf msg) {
+    public static ByteBuf reverseTransform(ByteBuf msg) {
         ByteBuf byteBuf = Unpooled.buffer();
         while (msg.readableBytes() > 0) {
             if (msg.readableBytes() >= 2) {
@@ -82,13 +82,10 @@ public class CodecUtils {
     }
 
     private static int findAfterMagicNumber(ByteBuf in) {
-        for (int index = in.readerIndex(); index < in.capacity(); index++) {
-            if (in.getByte(index) == TAIL_FLAG) {
-                return index;
-            }
 
-        }
-        return -1;
+        return in.forEachByte(in.readerIndex(), in.readableBytes(), value -> value != TAIL_FLAG);
+
+
     }
 
     private static boolean lengthIsRight(ByteBuf in) {

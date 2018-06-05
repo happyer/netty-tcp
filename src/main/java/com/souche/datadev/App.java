@@ -1,8 +1,6 @@
 package com.souche.datadev;
 
 import com.souche.datadev.server.NettyNioSever;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

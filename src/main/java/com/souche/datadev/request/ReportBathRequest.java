@@ -25,8 +25,7 @@ public class ReportBathRequest {
         count = byteBuf.readShort();
         type = byteBuf.readByte();
         length = byteBuf.readShort();
-
-        ByteBuf byteBuf1 = byteBuf.slice(byteBuf.readerIndex(), length);
+        ByteBuf byteBuf1 = CodecUtils.reverseTransform(byteBuf);
         do {
             ByteBuf byteBuf2 = CodecUtils.getObject(byteBuf1);
             Header header1 = new KMHeader(byteBuf2);
