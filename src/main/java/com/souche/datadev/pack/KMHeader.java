@@ -33,7 +33,7 @@ public class KMHeader implements Header {
 
 
     @Override
-    public short getMsgId() {
+    public short getId() {
         return id;
     }
 
@@ -44,7 +44,7 @@ public class KMHeader implements Header {
     }
 
     @Override
-    public short getMsgNumber() {
+    public short getNo() {
         return number;
     }
 

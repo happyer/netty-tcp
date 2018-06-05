@@ -1,8 +1,8 @@
 package com.souche.datadev.test.handler;
 
 import com.souche.datadev.codc.KMDecoder;
-import com.souche.datadev.codc.TransformDecoder;
-import com.souche.datadev.pack.KMPack;
+import com.souche.datadev.pack.Header;
+import com.souche.datadev.pack.KMHeader;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.embedded.EmbeddedChannel;
 import org.junit.Test;
@@ -17,6 +17,10 @@ public class TransformDecoderTest extends AbstractDecoder {
 
 
     @Test
+    public void name() throws Exception {
+    }
+
+    @Test
     public void testTransform() {
         ByteBuf byteBuf = get();
         ByteBuf input = byteBuf.copy();
@@ -24,10 +28,10 @@ public class TransformDecoderTest extends AbstractDecoder {
         assertTrue(channel.writeInbound(input.retain()));
         assertTrue(channel.finish());
         Object read = channel.readInbound();
-        assertTrue(read instanceof KMPack);
-        KMPack kmPack = (KMPack) read;
-        assertEquals(0x0200, kmPack.getHeader().getMsgId());
-        assertEquals(0x22, kmPack.getHeader().getLength());
+        assertTrue(read instanceof KMHeader);
+        Header kmPack = (KMHeader)read;
+        assertEquals(0x0200, kmPack.getId());
+        assertEquals(0x22, kmPack.getLength());
 
         byteBuf.release();
     }

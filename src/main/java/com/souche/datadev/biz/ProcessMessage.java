@@ -1,8 +1,6 @@
 package com.souche.datadev.biz;
 
-import com.souche.datadev.pack.Body;
 import com.souche.datadev.pack.Header;
-import com.souche.datadev.pack.KMBody;
 import com.souche.datadev.request.RegisterRequest;
 import com.souche.datadev.request.ReportRequest;
 import com.souche.datadev.response.CommonResponse;
@@ -39,9 +37,9 @@ public class ProcessMessage {
 
 
         logger.info("register provinceId={},cityId={},vendorId={},type={},sn={}",
-                registerRequest.getProvinceId(), registerRequest.getCityId(), registerRequest.getVendorId(), registerRequest.getTerminalType(), header.getMsgNumber());
+                registerRequest.getProvinceId(), registerRequest.getCityId(), registerRequest.getVendorId(), registerRequest.getTerminalType(), header.getNo());
 
-        Response registerResponse = new RegisterResponse(header.getPhone(), header.getMsgNumber(), Response.STATUS_SUCCESS, new String("token"));
+        Response registerResponse = new RegisterResponse(header.getPhone(), header.getNo(), Response.STATUS_SUCCESS, new String("token"));
 
 
         ctx.writeAndFlush(registerResponse.response());
@@ -64,17 +62,14 @@ public class ProcessMessage {
     public void doLocationReport() {
         ReportRequest reportRequest = new ReportRequest(header, buf);
 
-        Body body = new KMBody(buf, header);
-
         //todo send mq
-
         responseCommon();
         logger.info("location report gpsTime={} ,lat={},lon={} location={} ",
-                body.getTime(), body.getLatitude(), body.getLongitude(),body.getLocation());
+                reportRequest.getTime(), reportRequest.getLatitude(), reportRequest.getLongitude(),reportRequest.getLocation());
     }
 
     private void responseCommon() {
-        Response response = new CommonResponse(header.getPhone(), header.getMsgNumber(), header.getMsgId(), Response.STATUS_SUCCESS);
+        Response response = new CommonResponse(header.getPhone(), header.getNo(), header.getId(), Response.STATUS_SUCCESS);
         ctx.write(response.response());
     }
 }

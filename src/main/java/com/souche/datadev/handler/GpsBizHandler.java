@@ -4,7 +4,7 @@ import com.souche.datadev.biz.ProcessMessage;
 import com.souche.datadev.holder.ClientHolder;
 import com.souche.datadev.pack.Header;
 import com.souche.datadev.pack.KMHeader;
-import com.souche.datadev.pack.MessagId;
+import com.souche.datadev.pack.MessageId;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -40,7 +40,7 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
             ClientHolder.add(header, ctx.channel());
 
             ProcessMessage processMessge = new ProcessMessage(ctx, header, buf);
-            switch (MessagId.getVal(header.getMsgId())) {
+            switch (MessageId.getVal(header.getId())) {
                 case TERMINAL_REGISTER:
                     processMessge.doRegister();
                     break;

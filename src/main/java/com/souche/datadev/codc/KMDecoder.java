@@ -122,13 +122,6 @@ public class KMDecoder extends ByteToMessageDecoder {
             int endIndex = findAfterMagicNumber(in);
 
 
-            //test
-
-//            System.out.println("beginIndex=" + beginIndex);
-//            System.out.println("endIndex=" + endIndex);
-
-            //endtest
-
 
             //如果找不到 结尾的tail_flag 那就直接跳过,返回null
             if (endIndex == -1) {
