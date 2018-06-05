@@ -12,12 +12,14 @@ public class CommonResponse implements Response {
     private final short number;
     private final byte res;
     private final String phone;
+    private final short terminalId;
 
 
-    public CommonResponse(String phone, short number,  byte res) {
+    public CommonResponse(String phone, short number, short terminalId, byte res) {
         this.number = number;
         this.res = res;
         this.phone = phone;
+        this.terminalId = terminalId;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class CommonResponse implements Response {
         byteBuf.writeShort(number);
         //消息体
         byteBuf.writeShort(number);
-        byteBuf.writeShort(0x8001);
+        byteBuf.writeShort(terminalId);
         byteBuf.writeByte(res);
         return byteBuf;
     }

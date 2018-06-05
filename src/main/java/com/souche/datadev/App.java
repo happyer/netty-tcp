@@ -18,7 +18,7 @@ public class App {
 
 
         ExecutorService executorService = Executors.newCachedThreadPool();
-        executorService.submit(new NettyNioSever(9090));
+        executorService.submit(new NettyNioSever(5000));
 
 
     }

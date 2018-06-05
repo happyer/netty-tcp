@@ -1,9 +1,12 @@
 package com.souche.datadev.codc;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -13,8 +16,10 @@ import java.util.List;
  */
 public class KMDecoder extends ByteToMessageDecoder {
 
-    static final byte HEAD_FLAG = 0x7e;
-    static final byte TAIL_FLAG = 0x7e;
+    private final Logger logger = LoggerFactory.getLogger(KMDecoder.class);
+
+    private static final byte HEAD_FLAG = 0x7e;
+    private static final byte TAIL_FLAG = 0x7e;
 
     private static final int BASE_HEAD_SIZE = 12;
 
@@ -27,6 +32,8 @@ public class KMDecoder extends ByteToMessageDecoder {
         Object o = decode(ctx, buf);
         if (o != null) {
             out.add(o);
+//            logger.info("decoder hex ={}", ByteBufUtil.hexDump((ByteBuf) o));
+
         }
 
     }

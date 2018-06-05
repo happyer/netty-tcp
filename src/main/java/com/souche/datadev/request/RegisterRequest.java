@@ -29,6 +29,31 @@ public class RegisterRequest {
 //        vin = buf.
     }
 
+    public short getProvinceId() {
+        return provinceId;
+    }
 
+    public short getCityId() {
+        return cityId;
+    }
 
+    public byte[] getVendorId() {
+        return vendorId;
+    }
+
+    public byte[] getTerminalType() {
+        return terminalType;
+    }
+
+    public byte[] getTerminalId() {
+        return terminalId;
+    }
+
+    public byte getPlateColor() {
+        return plateColor;
+    }
+
+    public String getVin() {
+        return vin;
+    }
 }
