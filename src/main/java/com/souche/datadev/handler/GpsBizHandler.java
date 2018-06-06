@@ -1,6 +1,6 @@
 package com.souche.datadev.handler;
 
-import com.souche.datadev.test.biz.ProcessMessage;
+import com.souche.datadev.biz.ProcessMessage;
 import com.souche.datadev.holder.ClientHolder;
 import com.souche.datadev.pack.Header;
 import com.souche.datadev.pack.KMHeader;

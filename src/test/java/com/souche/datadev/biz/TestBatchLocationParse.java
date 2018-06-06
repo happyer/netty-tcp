@@ -1,4 +1,4 @@
-package com.souche.datadev.test.biz;
+package com.souche.datadev.biz;
 
 import com.souche.datadev.pack.Header;
 import com.souche.datadev.pack.KMHeader;

@@ -2,6 +2,7 @@ package com.souche.datadev.client.handler;
 
 import com.souche.datadev.client.HeartHelper;
 import com.souche.datadev.client.KMClient;
+import com.souche.datadev.utils.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     private String tcpData = "7E 02 00 00 22 01 44 00 44 00 55 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 18 05 30 17 31 36 25 04 00 00 00 00 69 7E";
+
+    private static String batchLocation = "7e0704012f0145314385390024000501003a000001000000080001cd7d01c207278128000000000002180606094227010400000000eb16000c00b28986040419179068187500060089ffffffff003a000001000000080101cd7d01c207278128000000000002180606094232010400000000eb16000c00b28986040419179068187500060089ffffffff003a000001000000080101cd7d01c207278128000000000000180606094258010400000000eb16000c00b28986040419179068187500060089ffffffff003a000001000000080001cd7d01c207278128000000000006180606094812010400000000eb16000c00b28986040419179068187500060089ffffffff003a000001000000080001cd7d01c207278128000000000006180606094828010400000000eb16000c00b28986040419179068187500060089ffffffff377e";
 
 
     @Override
@@ -35,15 +38,20 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 
         //拆包测试
-        for (int i = 0; i < 20; i++) {
-            ctx.writeAndFlush(generator());
-        }
+//        for (int i = 0; i < 20; i++) {
+//            ctx.writeAndFlush(generator());
+//        }
         //end拆包测试
 
+        //batch location
+        for (int i = 0; i < 10; i++) {
+            ctx.writeAndFlush(StringUtils.getByteBuf(batchLocation));
+        }
 
-        ctx.writeAndFlush(KMClient.getHeart());
 
-        HeartHelper.add(ctx.channel());
+//        ctx.writeAndFlush(KMClient.getHeart());
+
+//        HeartHelper.add(ctx.channel());
 
 
     }
@@ -60,7 +68,6 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         }
         return byteBuf;
     }
-
 
 
     public static byte[] hexStringToByteArray(String s) {

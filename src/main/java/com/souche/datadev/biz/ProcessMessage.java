@@ -1,4 +1,4 @@
-package com.souche.datadev.test.biz;
+package com.souche.datadev.biz;
 
 import com.alibaba.fastjson.JSON;
 import com.souche.datadev.pack.Header;
@@ -70,8 +70,6 @@ public class ProcessMessage {
 
         logger.info(JSON.toJSONString(reportRequest));
 
-//        logger.info("location report gpsTime={} ,lat={},lon={} location={} ",
-//                reportRequest.getTime(), reportRequest.getLatitude(), reportRequest.getLongitude(),reportRequest.getLocation());
     }
 
     private void responseCommon() {
@@ -80,7 +78,6 @@ public class ProcessMessage {
     }
 
     public void doLocationReportBath() {
-        logger.info("location batch");
         ReportBathRequest reportBathRequest = new ReportBathRequest(header, buf);
         logger.info(JSON.toJSONString(reportBathRequest));
         responseCommon();

@@ -1,8 +1,6 @@
 package com.souche.datadev.request;
 
 import com.souche.datadev.pack.Header;
-import com.souche.datadev.pack.KMHeader;
-import com.souche.datadev.utils.CodecUtils;
 import io.netty.buffer.ByteBuf;
 
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public class ReportBathRequest {
         count = byteBuf.readShort();
         type = byteBuf.readByte();
         do {
-          short  length = byteBuf.readShort();
+            short length = byteBuf.readShort();
             ByteBuf rpBuf = byteBuf.slice(byteBuf.readerIndex(), length);
             ReportRequest reportRequest = new ReportRequest(header, rpBuf);
             datas.add(reportRequest);
