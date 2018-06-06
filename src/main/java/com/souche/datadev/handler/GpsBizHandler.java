@@ -1,6 +1,6 @@
 package com.souche.datadev.handler;
 
-import com.souche.datadev.biz.ProcessMessage;
+import com.souche.datadev.test.biz.ProcessMessage;
 import com.souche.datadev.holder.ClientHolder;
 import com.souche.datadev.pack.Header;
 import com.souche.datadev.pack.KMHeader;
@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,9 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
 
     }
 
+
     private void messageParseAndReply(ChannelHandlerContext ctx, Object msg) {
+
         if (msg instanceof ByteBuf) {
 
 
@@ -40,26 +43,31 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
             ClientHolder.add(header, ctx.channel());
 
             ProcessMessage processMessge = new ProcessMessage(ctx, header, buf);
-            switch (MessageId.getVal(header.getId())) {
-                case TERMINAL_REGISTER:
-                    processMessge.doRegister();
-                    break;
-                case TERMINAL_AUTH:
-                    processMessge.doTerminalAuth();
-                    break;
-                case TERMINAL_HEART:
-                    processMessge.doHeart();
-                    break;
-                case LOCATION_REPORT:
-                    processMessge.doLocationReport();
-                    break;
-                case LOCATION_REPORT_BATCH:
-                    processMessge.doLocationReportBath();
-                    break;
-                default:
-                    logger.info(" default ctx.channel() = {}", ctx.channel());
-                    break;
+            try {
+                switch (MessageId.getVal(header.getId())) {
+                    case TERMINAL_REGISTER:
+                        processMessge.doRegister();
+                        break;
+                    case TERMINAL_AUTH:
+                        processMessge.doTerminalAuth();
+                        break;
+                    case TERMINAL_HEART:
+                        processMessge.doHeart();
+                        break;
+                    case LOCATION_REPORT:
+                        processMessge.doLocationReport();
+                        break;
+                    case LOCATION_REPORT_BATCH:
+                        processMessge.doLocationReportBath();
+                        break;
+                    default:
+                        break;
+                }
+            } finally {
+                ReferenceCountUtil.release(buf);
             }
+
+
         }
     }
 

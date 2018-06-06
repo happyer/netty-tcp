@@ -17,16 +17,16 @@ import java.util.List;
  */
 public class KMDecoder extends ByteToMessageDecoder {
 
-
+    private final Logger logger = LoggerFactory.getLogger(KMDecoder.class);
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
 
-        Object o = CodecUtils.getObject( buf);
+        Object o = CodecUtils.getObject(buf);
         if (o != null) {
             out.add(o);
-
         }
+
 
     }
 

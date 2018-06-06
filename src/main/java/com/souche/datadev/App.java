@@ -11,11 +11,13 @@ import java.util.concurrent.Executors;
 public class App {
 
 
+    private final  static int port = 9090;
+
     public static void main(String[] args) {
 
 
         ExecutorService executorService = Executors.newCachedThreadPool();
-        executorService.submit(new NettyNioSever(5000));
+        executorService.submit(new NettyNioSever(port));
 
 
     }

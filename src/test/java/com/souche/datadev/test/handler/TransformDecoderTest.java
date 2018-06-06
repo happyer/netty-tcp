@@ -1,10 +1,6 @@
 package com.souche.datadev.test.handler;
 
-import com.souche.datadev.codc.KMDecoder;
-import com.souche.datadev.pack.Header;
-import com.souche.datadev.pack.KMHeader;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.embedded.EmbeddedChannel;
+import com.souche.datadev.test.AbstractDecoder;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -70,12 +70,12 @@ public class KMClient {
         int port = 9090;
         KMClient kmClient = new KMClient(host, port);
 
-        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
-            HeartHelper.getChannels().forEach(channel -> {
-                channel.writeAndFlush(getHeart());
-                System.out.println("start send heart" );
-            });
-        }, 0, 1, TimeUnit.SECONDS);
+//        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
+//            HeartHelper.getChannels().forEach(channel -> {
+//                channel.writeAndFlush(getHeart());
+//                System.out.println("start send heart" );
+//            });
+//        }, 0, 1, TimeUnit.SECONDS);
         kmClient.start();
 
 

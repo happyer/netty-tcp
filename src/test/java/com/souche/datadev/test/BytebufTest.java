@@ -2,7 +2,6 @@ package com.souche.datadev.test;
 
 import com.souche.datadev.utils.BitUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,7 +32,6 @@ public class BytebufTest {
         int offset = byteBuf.forEachByte(byteBuf.readerIndex() + 1, byteBuf.readableBytes(), value -> value != 0x7e);
         Assert.assertEquals(res, offset);
 
-
     }
 
 
@@ -46,14 +44,14 @@ public class BytebufTest {
     }
 
     @Test
-    public void testFind(){
+    public void testFind() {
         ByteBuf byteBuf = getHeart();
-       int offset = findAfterMagicNumber(byteBuf);
+        int offset = findAfterMagicNumber(byteBuf);
         System.out.println("offset = " + offset);
     }
 
     private static int findAfterMagicNumber(ByteBuf in) {
-        for (int index = in.readerIndex()+1; index < in.capacity(); index++) {
+        for (int index = in.readerIndex() + 1; index < in.capacity(); index++) {
             if (in.getByte(index) == 0x7e) {
                 return index;
             }
@@ -61,4 +59,9 @@ public class BytebufTest {
         }
         return -1;
     }
+
+
+
+
+
 }

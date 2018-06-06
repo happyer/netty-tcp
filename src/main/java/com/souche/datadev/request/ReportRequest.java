@@ -25,7 +25,7 @@ public class ReportRequest {
     private int oilPipe;
     private int distance;
     private String phone;
-
+    private byte[] bsjExtention;
 
 
     public ReportRequest() {
@@ -49,20 +49,31 @@ public class ReportRequest {
         oilPipe = (status & 0x0400) == 0 ? 0 : 1;
         msg.readBytes(t);
         time = ByteBufUtil.hexDump(t);
-        //判断是否有附加信息
-        if (msg.readableBytes() > 2) {
+        //读取附加信息
+        while (msg.isReadable()) {
             byte mid = msg.readByte();
             byte length = msg.readByte();
             if (mid == 0x01) {
+                //里程字节长度
                 distance = msg.readInt();
             }
             if (mid == 0xEB) {
-                msg.skipBytes(length);
+                bsjExtention = new byte[length];
+                msg.readBytes(bsjExtention);
             }
 
         }
 
 
+    }
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public byte[] getBsjExtention() {
+        return bsjExtention;
     }
 
     public int getDistance() {

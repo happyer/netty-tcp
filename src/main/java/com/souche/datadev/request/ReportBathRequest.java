@@ -15,23 +15,21 @@ public class ReportBathRequest {
 
     private short count;
     private byte type;  //0 正常批量数据 1盲区补报
-    private short length; //
     private List<ReportRequest> datas = new ArrayList<>();
-
 
 
     public ReportBathRequest(Header header, ByteBuf byteBuf) {
 
         count = byteBuf.readShort();
         type = byteBuf.readByte();
-        length = byteBuf.readShort();
-        ByteBuf byteBuf1 = CodecUtils.reverseTransform(byteBuf);
         do {
-            ByteBuf byteBuf2 = CodecUtils.getObject(byteBuf1);
-            Header header1 = new KMHeader(byteBuf2);
-            ReportRequest reportRequest = new ReportRequest(header1, byteBuf2);
+          short  length = byteBuf.readShort();
+            ByteBuf rpBuf = byteBuf.slice(byteBuf.readerIndex(), length);
+            ReportRequest reportRequest = new ReportRequest(header, rpBuf);
             datas.add(reportRequest);
-        }while (byteBuf1.isReadable());
+            byteBuf.skipBytes(length);
+        } while (byteBuf.isReadable());
+
 
     }
 
@@ -43,9 +41,6 @@ public class ReportBathRequest {
         return type;
     }
 
-    public short getLength() {
-        return length;
-    }
 
     public List<ReportRequest> getDatas() {
         return datas;

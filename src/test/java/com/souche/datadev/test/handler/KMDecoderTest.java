@@ -1,9 +1,8 @@
 package com.souche.datadev.test.handler;
 
 import com.souche.datadev.codc.KMDecoder;
-import com.souche.datadev.utils.BitUtils;
+import com.souche.datadev.test.AbstractDecoder;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
 import org.junit.Test;
 
