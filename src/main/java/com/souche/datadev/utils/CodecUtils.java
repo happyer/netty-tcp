@@ -1,6 +1,7 @@
 package com.souche.datadev.utils;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.Unpooled;
 
 /**
@@ -114,7 +115,7 @@ public class CodecUtils {
      * @return
      */
     public static ByteBuf reverseTransform(ByteBuf msg) {
-        ByteBuf byteBuf = Unpooled.buffer();
+        ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer();
         while (msg.readableBytes() > 0) {
             if (msg.readableBytes() >= 2) {
                 short red = msg.getShort(msg.readerIndex());

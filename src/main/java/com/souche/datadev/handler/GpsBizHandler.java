@@ -9,7 +9,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
-import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,10 +62,9 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
                     default:
                         break;
                 }
-            } finally {
-                ReferenceCountUtil.release(buf);
+            } catch (Exception e) {
+                logger.error(e.getMessage());
             }
-
 
         }
     }
