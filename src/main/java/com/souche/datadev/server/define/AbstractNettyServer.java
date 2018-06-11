@@ -26,11 +26,13 @@ public abstract class AbstractNettyServer {
     private Channel channel;
     private String serverName;
 
+    private static int processors = Runtime.getRuntime().availableProcessors();
+
     static {
         if (bossGroup == null || workerGroup == null) {
             if (Epoll.isAvailable()) {
-                bossGroup = new EpollEventLoopGroup(1);
-                workerGroup = new EpollEventLoopGroup();
+                bossGroup = new EpollEventLoopGroup(processors, new PriorityThreadFactory(Thread.NORM_PRIORITY, "@+main-reactor"));
+                workerGroup = new EpollEventLoopGroup(processors * 2, new PriorityThreadFactory(Thread.NORM_PRIORITY, "@+sub-reactor"));
             } else {
                 bossGroup = new NioEventLoopGroup(1);
                 workerGroup = new NioEventLoopGroup();

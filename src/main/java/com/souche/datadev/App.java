@@ -1,9 +1,7 @@
 package com.souche.datadev;
 
 import com.souche.datadev.server.KMServer;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.souche.datadev.server.define.IServer;
 
 /**
  * Created by chauncy on 2018/5/29.
@@ -17,9 +15,12 @@ public class App {
 
     public static void main(String[] args) {
 
-        ExecutorService executorService = Executors.newCachedThreadPool();
-        executorService.submit(new KMServer(serverName,port));
-
+        IServer kmServer = new KMServer(serverName, port);
+        try {
+            kmServer.startServer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

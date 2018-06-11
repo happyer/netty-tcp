@@ -11,7 +11,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 /**
  * Created by chauncy on 2018/6/11.
  */
-public class KMServer extends AbstractNettyServer implements IServer,Runnable {
+public class KMServer extends AbstractNettyServer implements IServer {
 
     private int port;
 
@@ -46,8 +46,5 @@ public class KMServer extends AbstractNettyServer implements IServer,Runnable {
         pipeline.addLast(new GpsBizHandler());
     }
 
-    @Override
-    public void run() {
-        bind(port);
-    }
+
 }
