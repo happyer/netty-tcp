@@ -2,7 +2,6 @@ package com.souche.datadev.utils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.buffer.Unpooled;
 
 /**
  * Created by chauncy on 2018/6/5.

@@ -67,15 +67,16 @@ public class KMClient {
 
     public static void main(String[] args) throws InterruptedException {
         String host = "localhost";
-        int port = 9090;
+//        String host = "115.29.174.15";
+        int port = 6688;
         KMClient kmClient = new KMClient(host, port);
 
-//        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
-//            HeartHelper.getChannels().forEach(channel -> {
-//                channel.writeAndFlush(getHeart());
-//                System.out.println("start send heart" );
-//            });
-//        }, 0, 1, TimeUnit.SECONDS);
+        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
+            HeartHelper.getChannels().forEach(channel -> {
+                channel.writeAndFlush(getHeart());
+                System.out.println("start send heart" );
+            });
+        }, 0, 1, TimeUnit.SECONDS);
         kmClient.start();
 
 

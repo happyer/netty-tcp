@@ -51,7 +51,7 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 //        ctx.writeAndFlush(KMClient.getHeart());
 
-//        HeartHelper.add(ctx.channel());
+        HeartHelper.add(ctx.channel());
 
 
     }
