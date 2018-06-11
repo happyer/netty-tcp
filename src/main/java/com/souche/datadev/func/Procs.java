@@ -1,8 +1,5 @@
 package com.souche.datadev.func;
 
-import com.souche.datadev.func.Proc;
-import com.souche.datadev.func.Proc1;
-
 /**
  * Created by chauncy on 2018/6/11.
  */
