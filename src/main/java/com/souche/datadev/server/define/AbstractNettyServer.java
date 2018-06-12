@@ -43,11 +43,12 @@ public abstract class AbstractNettyServer {
     protected AbstractNettyServer(String serverName) {
         this.serverName = Objects.requireNonNull(serverName, "server name");
         bootstrap = new ServerBootstrap();
+        bootstrap.option(ChannelOption.SO_BACKLOG, 1024)
+                .option(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator())
+                .channel(EpollServerSocketChannel.class)
+                .childOption(ChannelOption.SO_REUSEADDR, true)
+                .childOption(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator());
         if (Epoll.isAvailable()) {
-            bootstrap.option(ChannelOption.SO_BACKLOG, 1024)
-                    .channel(EpollServerSocketChannel.class)
-                    .childOption(ChannelOption.SO_REUSEADDR, true);
-
             log.info(serverName + " epoll init");
         } else {
             bootstrap.channel(NioServerSocketChannel.class);

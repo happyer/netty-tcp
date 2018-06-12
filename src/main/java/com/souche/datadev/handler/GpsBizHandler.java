@@ -75,6 +75,8 @@ public class GpsBizHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+
+        logger.info("[channel-size] current channel count = {}", ClientHolder.getCount());
     }
 
 

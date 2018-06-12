@@ -19,6 +19,10 @@ public class ClientHolder {
     private static Map<Channel, String> channelStringMap = new ConcurrentHashMap<>(1024);
 
 
+    public static int getCount() {
+        return map.size();
+    }
+
     public static void add(Header header, Channel channel) {
         map.put(header.getPhone(), channel);
         channelStringMap.put(channel, header.getPhone());

@@ -1,6 +1,8 @@
 package com.souche.datadev.biz;
 
 import com.alibaba.fastjson.JSON;
+import com.souche.datadev.mq.KafkaProperties;
+import com.souche.datadev.mq.Sender;
 import com.souche.datadev.pack.Header;
 import com.souche.datadev.request.RegisterRequest;
 import com.souche.datadev.request.ReportBathRequest;
@@ -62,13 +64,13 @@ public class ProcessMessage {
     }
 
     public void doLocationReport() {
-        ReportRequest reportRequest = new ReportRequest(header,buf);
+        ReportRequest reportRequest = new ReportRequest(header, buf);
 
         //todo send mq
         responseCommon();
 
-
-        logger.info(JSON.toJSONString(reportRequest));
+        Sender.INSTANCE.send(KafkaProperties.TOPIC, reportRequest.getPhone(), JSON.toJSONString(reportRequest));
+//        logger.info(JSON.toJSONString(reportRequest));
 
     }
 
@@ -79,7 +81,12 @@ public class ProcessMessage {
 
     public void doLocationReportBath() {
         ReportBathRequest reportBathRequest = new ReportBathRequest(header, buf);
-        logger.info(JSON.toJSONString(reportBathRequest));
+
+       // logger.info(JSON.toJSONString(reportBathRequest));
         responseCommon();
+        for (ReportRequest reportRequest : reportBathRequest.getDatas()) {
+            Sender.INSTANCE.send(KafkaProperties.TOPIC, reportRequest.getPhone(), JSON.toJSONString(reportRequest));
+        }
+
     }
 }

@@ -27,7 +27,6 @@ public class KMClient {
     private final String host;
     private final int port;
 
-
     public KMClient(String host, int port) {
         this.host = host;
         this.port = port;
@@ -74,15 +73,13 @@ public class KMClient {
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
             HeartHelper.getChannels().forEach(channel -> {
                 channel.writeAndFlush(getHeart());
-                System.out.println("start send heart" );
+                System.out.println("start send heart");
             });
         }, 0, 1, TimeUnit.SECONDS);
         kmClient.start();
 
 
     }
-
-
 
 
 }

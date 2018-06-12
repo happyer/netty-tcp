@@ -1,19 +1,16 @@
 package com.souche.datadev.client.handler;
 
 import com.souche.datadev.client.HeartHelper;
-import com.souche.datadev.client.KMClient;
 import com.souche.datadev.utils.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Created by chauncy on 2018/5/30.
  */
-public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class ConnectionClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     private String tcpData = "7E 02 00 00 22 01 44 00 44 00 55 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 18 05 30 17 31 36 25 04 00 00 00 00 69 7E";
 
@@ -44,9 +41,9 @@ public class KMClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         //end拆包测试
 
         //batch location
-        for (int i = 0; i < 10; i++) {
-            ctx.writeAndFlush(StringUtils.getByteBuf(batchLocation));
-        }
+//        for (int i = 0; i < 10; i++) {
+//            ctx.writeAndFlush(StringUtils.getByteBuf(batchLocation));
+//        }
 
 
 //        ctx.writeAndFlush(KMClient.getHeart());
